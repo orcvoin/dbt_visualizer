@@ -38,6 +38,9 @@ download and install "macOS - Universal" from https://github.com/jgraph/drawio-d
 #### windows
 download installer from https://github.com/jgraph/drawio-desktop/releases
 
+### REQUIREMENTS
+`pip install -r requirements.txt`
+
 # HOW TO USE:
 
 `python3 generate_scheme.py --path /path_to/project_name/target/manifest.json --name project_name.xml`
