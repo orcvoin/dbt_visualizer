@@ -3,3 +3,4 @@ uvicorn
 networkx
 pygraphviz
 python-multipart
+dotenv

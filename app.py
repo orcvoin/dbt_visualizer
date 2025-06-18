@@ -1,25 +1,40 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request, status
 import shutil
 import os
 import subprocess
 import logging
 import uuid
 import traceback
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
 
 # Логирование в stdout
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
+API_TOKEN = os.environ.get("API_TOKEN")
 OUTPUT_DIR = "/output"
 TMP_DIR = "/tmp"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+
+def verify_token(request: Request):
+    auth = request.headers.get("Authorization")
+    if not auth or not auth.startswith("Bearer "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing or invalid token")
+    token = auth.split(" ")[1]
+    if token != API_TOKEN:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+
 @app.post("/process/")
 async def process_manifest(
-    manifest: UploadFile = File(...),
-    out_name: str = Form("raw_graph.xml")
+        request: Request,
+        manifest: UploadFile = File(...),
+        out_name: str = Form("raw_graph.xml")
 ):
+    verify_token(request)
     request_id = str(uuid.uuid4())[:8]
     # input_path = os.path.join(TMP_DIR, f"{request_id}_{manifest.filename}")
     input_path = os.path.join(TMP_DIR, f"{manifest.filename}")
@@ -85,6 +100,7 @@ async def process_manifest(
                 "traceback": tb,
             }
         )
+
 
 @app.get("/health")
 async def health():
