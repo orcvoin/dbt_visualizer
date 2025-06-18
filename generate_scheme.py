@@ -57,7 +57,7 @@ def build_graph(manifest):
         graph.add_node(model_name, type="model", file_path=node.get("original_file_path", ""),
                        description=node.get("description", ""), node_id=node_id,
                        package_name=node.get("package_name", ""),
-                       materialization=node.get("supervisord.conf", {}).get("materialized", "unknown"))
+                       materialized=node.get("config", {}).get("materialized", "unknown"))  # Исправлено
         for dep in node.get("depends_on", {}).get("nodes", []):
             if dep in nodes and nodes[dep]["resource_type"] == "model":
                 dep_name = nodes[dep]["name"]
@@ -326,7 +326,7 @@ def export_to_drawio(graph, manifest, raw_graph_xml="raw_graph.xml"):
         description = escape_xml(attrs.get("description", ""))
         model_path = escape_xml(attrs.get("file_path", ""))
         package_name = escape_xml(attrs.get("package_name", ""))
-        materialization = escape_xml(attrs.get("materialization", "unknown"))
+        materialization = escape_xml(attrs.get("materialized", "unknown"))
         project_name = manifest.get("metadata", {}).get("project_name", "")
         is_package_model = "dbt_packages" in model_path or (package_name and package_name != project_name)
         if is_package_model:
