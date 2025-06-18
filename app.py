@@ -21,9 +21,11 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def verify_token(request: Request):
     auth = request.headers.get("Authorization")
+    logging.info(f"Проверка токена авторизации...")
     if not auth or not auth.startswith("Bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing or invalid token")
     token = auth.split(" ")[1]
+    logging.info(f"токен: {token}")
     if token != API_TOKEN:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
