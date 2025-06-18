@@ -24,7 +24,7 @@ def main():
     if manifest:
         graph = build_graph(manifest)
         export_to_drawio(graph, manifest, raw_graph_xml=args.name)
-        subprocess.run(["drawio", args.name])
+        # subprocess.run(["drawio", args.name])  # for generation only - comment this row
 
 def model_has_tests(model_id, manifest):
     test_nodes = {k: v for k, v in manifest["nodes"].items() if v["resource_type"] == "test"}

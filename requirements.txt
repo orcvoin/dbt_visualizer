@@ -1,2 +1,5 @@
+fastapi
+uvicorn
 networkx
 pygraphviz
+python-multipart
