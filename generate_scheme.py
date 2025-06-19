@@ -330,7 +330,8 @@ def export_to_drawio(graph, manifest, raw_graph_xml="raw_graph.xml"):
         project_name = manifest.get("metadata", {}).get("project_name", "")
         is_package_model = "dbt_packages" in model_path or (package_name and package_name != project_name)
         if is_package_model:
-            print(f"📍 Identified package model: {node}, package: {package_name}, path: {model_path}, materialization: {materialization}")
+            pass
+            # print(f"📍 Identified package model: {node}, package: {package_name}, path: {model_path}, materialization: {materialization}")
         label = f"{escape_xml(node)}<br>{model_path}"
         num_lines = label.count("<br>") + 1
         line_height = 8
@@ -361,7 +362,7 @@ def export_to_drawio(graph, manifest, raw_graph_xml="raw_graph.xml"):
             node_data = manifest["nodes"].get(node_id_manifest, {})
             schema_name = node_data.get("schema", "")
             table_alias = node_data.get("name", node)
-            print(f"🔍 Model: {node}, node_id: {node_id_manifest}, schema: {schema_name}, name: {table_alias}")
+            # print(f"🔍 Model: {node}, node_id: {node_id_manifest}, schema: {schema_name}, name: {table_alias}")
             table_name = f"{schema_name}.{table_alias}" if schema_name else table_alias
         elif n_type == "source":
             source_id = attrs.get("node_id", "")
